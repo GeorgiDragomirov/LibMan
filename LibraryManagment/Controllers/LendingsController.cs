@@ -49,8 +49,13 @@ namespace LibraryManagment.Controllers
         // GET: Lendings/Create
         public IActionResult Create()
         {
-            ViewData["BookId"] = new SelectList(_context.Book, "Id", "Id");
-            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id");
+            ViewData["BookId"] = new SelectList(_context.Book, "Id", "Title");
+            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "FullName");
+
+            //Another way to transfer data to vews (DTO). Refer to LendingViewModel class in Models.
+            //LendingViewModel lendingViewModel = new LendingViewModel();
+            //lendingViewModel.Books = _context.Book.ToList();
+            //lendingViewModel.Members = _context.Member.ToList();
             return View();
         }
 
@@ -67,8 +72,8 @@ namespace LibraryManagment.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BookId"] = new SelectList(_context.Book, "Id", "Id", lending.BookId);
-            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id", lending.MemberId);
+            ViewData["BookId"] = new SelectList(_context.Book, "Id", "Title", lending.BookId);
+            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "FullName", lending.MemberId);
             return View(lending);
         }
 
@@ -85,8 +90,8 @@ namespace LibraryManagment.Controllers
             {
                 return NotFound();
             }
-            ViewData["BookId"] = new SelectList(_context.Book, "Id", "Id", lending.BookId);
-            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id", lending.MemberId);
+            ViewData["BookId"] = new SelectList(_context.Book, "Id", "Title", lending.BookId);
+            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "FullName", lending.MemberId);
             return View(lending);
         }
 
@@ -122,8 +127,8 @@ namespace LibraryManagment.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BookId"] = new SelectList(_context.Book, "Id", "Id", lending.BookId);
-            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id", lending.MemberId);
+            ViewData["BookId"] = new SelectList(_context.Book, "Id", "Title", lending.BookId);
+            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "FullName", lending.MemberId);
             return View(lending);
         }
 
