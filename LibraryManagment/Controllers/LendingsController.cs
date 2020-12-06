@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LibraryManagment.Data;
 using LibraryManagment.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryManagment.Controllers
 {
+    [Authorize]
     public class LendingsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -166,6 +168,15 @@ namespace LibraryManagment.Controllers
         private bool LendingExists(int id)
         {
             return _context.Lending.Any(e => e.Id == id);
+        }
+
+        //Future works
+
+        private decimal CalculateAmountOwned(DateTime landingDate, DateTime returnDate)
+        {
+            decimal amountOwned = 0;
+
+            return amountOwned;
         }
     }
 }

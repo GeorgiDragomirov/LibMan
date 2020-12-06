@@ -10,7 +10,11 @@ namespace LibraryManagment.Models
     {
         // Class to record the lending process in the college
         public int Id { get; set; }
+
+        [Display(Name = "Member Name")]
         public int MemberId { get; set; }
+
+        [Display(Name = "Book Title")]
         public int BookId { get; set; }
 
         [DataType(DataType.Date)]
