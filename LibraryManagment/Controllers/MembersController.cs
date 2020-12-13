@@ -22,9 +22,38 @@ namespace LibraryManagment.Controllers
         }
 
         // GET: Members
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            return View(await _context.Member.ToListAsync());
+            ViewData["ForenameSort"] = String.IsNullOrEmpty(sortOrder) ? "forename_desc" : "";
+            ViewData["SurnameSort"] = String.IsNullOrEmpty(sortOrder) ? "Surname_desc" : "";
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var members = from s in _context.Member
+                          select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                members = members.Where(s => s.Forename .Contains(searchString)
+                                   || s.Surname.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "forename_desc":
+                    members = members.OrderByDescending(s => s.Forename);
+                    break;
+                case "Surname":
+                    members = members.OrderBy(s => s.Surname);
+                    break;
+                case "Surname_desc":
+                    members = members.OrderByDescending(s => s.Surname);
+                    break;
+                default:
+                    members = members.OrderBy(s => s.Forename);
+                    break;
+            }
+            return View(await members.AsNoTracking().ToListAsync());
+
+            //return View(await _context.Member.ToListAsync());
         }
 
         // GET: Members/Details/5

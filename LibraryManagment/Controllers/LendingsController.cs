@@ -34,8 +34,9 @@ namespace LibraryManagment.Controllers
                           select s;
             if (!String.IsNullOrEmpty(searchString))
             {
-                lending = lending.Where(s => s.Member.Contains(searchString)
-                                       || s.Member.Contains(searchString));
+                lending = lending.Where(s => s.Member.Forename.Contains(searchString)
+                                       || s.Member.Surname.Contains(searchString)
+                                       || s.Book.Title.Contains(searchString));
             }
             switch (sortOrder)
             {
