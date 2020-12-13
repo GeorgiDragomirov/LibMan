@@ -1,4 +1,5 @@
-﻿using LibraryManagment.Models;
+﻿using LibraryManagment.Data;
+using LibraryManagment.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,13 +14,29 @@ namespace LibraryManagment.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ApplicationDbContext _context;
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
+            return View();
+        }
+        public IActionResult BooksRented()
+        {
+
+            //IQueryable<LendedBooksVM> data =
+            //        from member in _context.Member
+            //        group member by member into dateGroup
+            //        select new EnrollmentDateGroup()
+            //        {
+            //            EnrollmentDate = dateGroup.Key,
+            //            StudentCount = dateGroup.Count()
+            //        };
+            //return View(await data.AsNoTracking().ToListAsync());
             return View();
         }
 

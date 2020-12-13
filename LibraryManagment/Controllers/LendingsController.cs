@@ -22,10 +22,81 @@ namespace LibraryManagment.Controllers
         }
 
         // GET: Lendings
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            var applicationDbContext = _context.Lending.Include(l => l.Book).Include(l => l.Member);
-            return View(await applicationDbContext.ToListAsync());
+            //var applicationDbContext = _context.Lending.Include(l => l.Book).Include(l => l.Member);
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["RetDateSortParm"] = sortOrder == "ReturnDate" ? "ReturnDate_desc" : "ReturnDate";
+            ViewData["CurrentFilter"] = searchString;
+            
+            var lending = from s in _context.Lending.Include(l => l.Book).Include(l => l.Member)
+                          select s;
+            //if (!String.IsNullOrEmpty(searchString))
+            //{
+            //    lending = lending.Where(s => s.Member.Contains(searchString)
+            //                           || s.Member.Contains(searchString));
+            //}
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    lending = lending.OrderByDescending(s => s.Member);
+                    break;
+                case "Date":
+                    lending = lending.OrderBy(s => s.LendingDate);
+                    break;
+                case "date_desc":
+                    lending = lending.OrderByDescending(s => s.LendingDate);
+                    break;
+                case "ReturnDate":
+                    lending = lending.OrderBy(s => s.ReturnDate);
+                    break;
+                case "ReturnDate_desc":
+                    lending = lending.OrderByDescending(s => s.ReturnDate);
+                    break;
+                default:
+                    lending = lending.OrderBy(s => s.Member);
+                    break;
+            }
+            return View(await lending.AsNoTracking().ToListAsync());
+            //return View(await applicationDbContext.ToListAsync());
+
+            ////Adding search into the lending
+            //ViewData["CurrentFilter"] = searchString;
+            //var members = from s in _context.Member
+            //              select s;
+            //if (!String.IsNullOrEmpty(searchString))
+            //{
+            //    members = members.Where(s => s.Surname.Contains(searchString)
+            //                           || s.Forename.Contains(searchString));
+            //}
+
+
+            ////Implementing sorting for Full Name
+            //ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ////var members = from s in _context.Member
+            ////               select s;
+            //switch (sortOrder)
+            //{
+            //    case "name_desc":
+            //        members = members.OrderByDescending(s => s.Forename);
+            //        break;
+            //    //case "Date":
+            //    //    members = members.OrderBy(s => s.EnrollmentDate);
+            //    //    break;
+            //    //case "date_desc":
+            //    //    members = members.OrderByDescending(s => s.EnrollmentDate);
+            //    //    break;
+            //    default:
+            //        members = members.OrderBy(s => s.Forename);
+            //        break;
+
+
+
+            //}
+            ////return View(await members.AsNoTracking().ToListAsync());
+
+
         }
 
         // GET: Lendings/Details/5
