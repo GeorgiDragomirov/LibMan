@@ -1,9 +1,8 @@
 ﻿using LibraryManagment.Data;
 using LibraryManagment.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,19 +24,20 @@ namespace LibraryManagment.Controllers
         {
             return View();
         }
-        public IActionResult BooksRented()
+        public async Task<ActionResult> BooksRented()
         {
 
-            //IQueryable<LendedBooksVM> data =
-            //        from member in _context.Member
-            //        group member by member into dateGroup
-            //        select new EnrollmentDateGroup()
-            //        {
-            //            EnrollmentDate = dateGroup.Key,
-            //            StudentCount = dateGroup.Count()
-            //        };
-            //return View(await data.AsNoTracking().ToListAsync());
-            return View();
+            IQueryable<LendedBooksVM> data =
+                    from Lending in _context.Lending where Lending.AmountPaid == false
+                    group Lending by Lending.Member.Forename + ' ' + Lending.Member.Surname + ' ' into dateGroup
+
+                    select new LendedBooksVM()
+                    {
+                        FullName = dateGroup.Key,
+                        BookNumbers = dateGroup.Count()
+                    };
+            return View(await data.AsNoTracking().ToListAsync());
+            //return View();
         }
 
         public IActionResult Privacy()

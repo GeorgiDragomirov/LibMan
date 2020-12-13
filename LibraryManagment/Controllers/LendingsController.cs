@@ -32,11 +32,11 @@ namespace LibraryManagment.Controllers
             
             var lending = from s in _context.Lending.Include(l => l.Book).Include(l => l.Member)
                           select s;
-            //if (!String.IsNullOrEmpty(searchString))
-            //{
-            //    lending = lending.Where(s => s.Member.Contains(searchString)
-            //                           || s.Member.Contains(searchString));
-            //}
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                lending = lending.Where(s => s.Member.Contains(searchString)
+                                       || s.Member.Contains(searchString));
+            }
             switch (sortOrder)
             {
                 case "name_desc":
