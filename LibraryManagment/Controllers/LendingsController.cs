@@ -30,7 +30,7 @@ namespace LibraryManagment.Controllers
             ViewData["RetDateSortParm"] = sortOrder == "ReturnDate" ? "ReturnDate_desc" : "ReturnDate";
             ViewData["CurrentFilter"] = searchString;
             
-            var lending = from s in _context.Lending.Include(l => l.Book).Include(l => l.Member)
+            var lending = from s in _context.Lending.Include(l => l.Book)
                           select s;
             if (!String.IsNullOrEmpty(searchString))
             {

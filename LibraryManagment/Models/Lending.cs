@@ -8,6 +8,8 @@ namespace LibraryManagment.Models
 {
     public class Lending
     {
+        public static DateTime Today { get; }
+
         public const int AllowedDays = 35;
         // Class to record the lending process in the college
         public int Id { get; set; }

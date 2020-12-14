@@ -22,10 +22,49 @@ namespace LibraryManagment.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            var applicationDbContext = _context.Book.Include(b => b.BookCategory);
-            return View(await applicationDbContext.ToListAsync());
+            //var applicationDbContext = _context.Book.Include(b => b.BookCategory);
+
+            ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Tname_desc" : "";
+            ViewData["AuthorSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Aname_desc" : "";
+            ViewData["LocationSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Lname_desc" : "";
+            ViewData["CurrentFilter"] = searchString;
+
+            var books = from s in _context.Book
+                        select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(s => s.Title.Contains(searchString)
+                                       || s.Author.Contains(searchString)
+                                       || s.LocationInLibrary.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "Tname_desc":
+                    books = books.OrderByDescending(s => s.Title);
+                    break;
+                case "Aname":
+                    books = books.OrderBy(s => s.Author);
+                    break;
+                case "Aname_desc":
+                    books = books.OrderByDescending(s => s.Author);
+                     break;
+
+                case "Lname":
+                    books = books.OrderBy(s => s.LocationInLibrary);
+                    break;
+                case "Lname_desc":
+                    books = books.OrderByDescending(s => s.LocationInLibrary);
+                    break;
+
+                default:
+                    books = books.OrderBy(s => s.Title);
+                    break;
+            }
+            return View(await books.AsNoTracking().ToListAsync());
+            //return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Books/Details/5
