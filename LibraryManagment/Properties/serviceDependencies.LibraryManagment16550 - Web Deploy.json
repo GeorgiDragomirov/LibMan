@@ -1,14 +1,9 @@
 {
   "dependencies": {
     "mssql1": {
-      "type": "mssql.onprem",
-      "connectionId": "DefaultConnection",
-      "secretStore": "AzureAppSettings"
-    },
-    "mssql2": {
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/librarymanagmentdbserver/databases/LibraryManagment_db",
       "type": "mssql.azure",
-      "connectionId": "AzureDatabase",
+      "connectionId": "DefaultConnection",
       "secretStore": "AzureAppSettings"
     }
   }
